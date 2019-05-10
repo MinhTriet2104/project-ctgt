@@ -92,8 +92,7 @@ int checkUsername(string sUser, string sPass);
 void editEmployee();
 void ghiFileUser();
 void ghiFileEmployee();
-void Registerme();
-void Registerpassword();
+void ghiFileUserAccount(User xUser);
 void changePassword(string sUser);
 
 //Bien toan cuc
@@ -115,6 +114,17 @@ void main() {
 }
 
 //dinh nghia ham con
+void ghiFileUserAccount(User xUser) {
+	ofstream fcout;
+	fcout.open(xUser.sAccount + ".dat");
+	fcout << xUser.sName << '#';
+	fcout << xUser.nAge << '#';
+	fcout << xUser.sAddress << '#';
+	fcout << xUser.nNumberPhone << '#';
+	fcout << xUser.sMailAddress;
+	fcout.close();
+}
+
 void ghiFileEmployee() {
 	ofstream fcout;
 	fcout.open("employee.dat");
@@ -203,32 +213,113 @@ void editEmployee() {
 			flag = 1;
 			outputUser(p->xData);
 			cout << endl;
-			cout << "\t\t=================================================" << endl;
-			cout << "\t\t= "; SetColor(13); cout << "\t\t1. Edit name";SetColor(12); cout << "          =" << endl;
-			cout << "\t\t= "; SetColor(13); cout << "\t\t2. Find employee";SetColor(12); cout << "                =" << endl;
-			cout << "\t\t= "; SetColor(13); cout << "\t\t3. Edit employee";SetColor(12); cout << "                =" << endl;
-			cout << "\t\t= "; SetColor(13); cout << "\t\t4. View employee";SetColor(12); cout << "                =" << endl;
-			cout << "\t\t= "; SetColor(13); cout << "\t\t5. Exit Application";SetColor(12); cout << "             =" << endl;
-			SetColor(12);
-			cout << "\t\t=================================================" << endl;
-			cout << endl;
+			SetColor(10);
+			cout << "\n\t\t\t * Lua chon edit * \n";
+			SetColor(14);
+			cout << "\t\t\t   1. Ho ten\n";
+			cout << "\t\t\t   2. Tuoi\n";
+			cout << "\t\t\t   3. Dia chi\n";
+			cout << "\t\t\t   4. SDT\n";
+			cout << "\t\t\t   5. Mail\n";
+			cout << "\t\t\t   6. Quay lai\n";
 			SetColor(13);
 			int iOption;
-			cout << "Ban muon edit: ";
+			cout << "\n\t\t\t- Ban muon edit: ";
 			SetColor(15);
 			cin >> iOption;
-			system("pause");
-			system("cls");
-			login();
+			string sMoi;
+			int iMoi;
+			switch (iOption)
+			{
+			case 1:
+				SetColor(13);
+				cout << "\t\tNhap Ho ten moi: ";
+				SetColor(15);
+				rewind(stdin);
+				getline(cin, sMoi);
+				p->xData.sName = sMoi;
+				SetColor(10);
+				ghiFileUserAccount(p->xData);
+				ghiFileUser();
+				cout << "\n\t\t\tThay doi thanh cong!\n";
+				system("pause");
+				system("cls");
+				menuAdmin();
+				break;
+			case 2:
+				SetColor(13);
+				cout << "\t\tNhap Tuoi moi: ";
+				SetColor(15);
+				rewind(stdin);
+				cin >> iMoi;
+				p->xData.nAge = iMoi;
+				SetColor(10);
+				ghiFileUserAccount(p->xData);
+				ghiFileUser();
+				cout << "\n\t\t\tThay doi thanh cong!\n";
+				system("pause");
+				system("cls");
+				menuAdmin();
+				break;
+			case 3:
+				SetColor(13);
+				cout << "\t\tNhap Dia chi moi: ";
+				SetColor(15);
+				rewind(stdin);
+				getline(cin, sMoi);
+				p->xData.sAddress = sMoi;
+				SetColor(10);
+				ghiFileUserAccount(p->xData);
+				ghiFileUser();
+				cout << "\n\t\t\tThay doi thanh cong!\n";
+				system("pause");
+				system("cls");
+				menuAdmin();
+				break;
+			case 4:
+				SetColor(13);
+				cout << "\t\tNhap SDT moi: ";
+				SetColor(15);
+				rewind(stdin);
+				getline(cin, sMoi);
+				p->xData.nNumberPhone = sMoi;
+				SetColor(10);
+				ghiFileUserAccount(p->xData);
+				ghiFileUser();
+				cout << "\n\t\t\tThay doi thanh cong!\n";
+				system("pause");
+				system("cls");
+				menuAdmin();
+				break;
+			case 5:
+				SetColor(13);
+				cout << "\t\tNhap Mail moi: ";
+				SetColor(15);
+				rewind(stdin);
+				getline(cin, sMoi);
+				p->xData.sMailAddress = sMoi;
+				SetColor(10);
+				ghiFileUserAccount(p->xData);
+				ghiFileUser();
+				cout << "\n\t\t\tThay doi thanh cong!\n";
+				system("pause");
+				system("cls");
+				menuAdmin();
+				break;
+			default:
+				system("cls");
+				menuAdmin();
+				break;
+			}
 		}
 	}
 	if (flag == 0) {
 		SetColor(12);
-		cout << "\nUsername khong ton tai!\n";
+		cout << "\n\t\t\tUsername khong ton tai!\n";
 		cout << endl;
 		system("pause");
 		system("cls");
-		login();
+		menuAdmin();
 	}
 }
 
