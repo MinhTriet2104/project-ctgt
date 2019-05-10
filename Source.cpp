@@ -11,7 +11,8 @@ PROJECT Cau truc du lieu
 #include <conio.h>
 #include <windows.h>
 using namespace std;
-#define MAX 10
+
+//Khai bao struct
 struct Administrators
 {
 	string sAcount_Admin;
@@ -38,31 +39,25 @@ struct Node
 	User xData;
 	Node *pNext;
 };
-struct AdminNode
-{
+struct AdminNode {
 	Administrators xData;
 	AdminNode *pNext;
 };
-struct AdminList
-{
+struct AdminList {
 	AdminNode *pHead;
 	AdminNode *pTail;
-	AdminList()
-	{
+	AdminList() {
 		pHead = pTail = NULL;
 	}
 };
-struct EmployeeNode
-{
+struct EmployeeNode {
 	Employee xData;
 	EmployeeNode *pNext;
 };
-struct EmployeeList
-{
+struct EmployeeList {
 	EmployeeNode *pHead;
 	EmployeeNode *pTail;
-	EmployeeList()
-	{
+	EmployeeList() {
 		pHead = pTail = NULL;
 	}
 };
@@ -75,43 +70,168 @@ struct List
 		pHead = pTail = NULL;
 	}
 };
+
 //khai bao nguyen mau ham con
 Node *CreateNode(User xUS);
 AdminNode *CreateNodeAdmin(Administrators xAdmin);
 EmployeeNode *CreateNodeEmployee(Employee xEmployee);
-void addTail(List &L, User xUS);
-void addTailAdmin(AdminList &L, Administrators xAdmin);
-void addTailEmployee(EmployeeList &L, Employee xEmployee);
-void login(User xUS);
-void outputUser(List L);
-void outputUsers(List L);
-void docFileUsers(List &L);
-void docFileAdmins(AdminList &L);
-void docFileEmployees(EmployeeList &L);
+void addTail(User xUS);
+void addTailAdmin(Administrators xAdmin);
+void addTailEmployee(Employee xEmployee);
+void outputUser(User xUS);
+void outputUsers();
+void docFileUsers();
+void docFileAdmins();
+void docFileEmployees();
 void SetColor(int ForgC);
 void menuAdmin();
 void menuEmployee(string sUser);
-void login(AdminList aL, EmployeeList eL);
+void login();
 void loading();
-int checkUsername(string sUser, string sPass, AdminList aL, EmployeeList eL);
+int checkUsername(string sUser, string sPass);
+void editEmployee();
+void ghiFileUser();
+void ghiFileEmployee();
+void Registerme();
+void Registerpassword();
+void changePassword(string sUser);
+
+//Bien toan cuc
+List userL;
+AdminList AdminL;
+EmployeeList EmployeeL;
+
 //ham main
-void main()
-{
-	List userL;
-	AdminList AdminL;
-	EmployeeList EmployeeL;
-	
-	docFileAdmins(AdminL);
-	docFileEmployees(EmployeeL);
-	docFileUsers(userL);
+void main() {
+	docFileAdmins();
+	docFileEmployees();
+	docFileUsers();
 	
 	//outputUsers(userL);
 
-	login(AdminL, EmployeeL);
+	login();
 
 	system("pause");
 }
+
 //dinh nghia ham con
+void ghiFileEmployee() {
+	ofstream fcout;
+	fcout.open("employee.dat");
+	for (EmployeeNode *p = EmployeeL.pHead; p != NULL; p = p->pNext) {
+		fcout << p->xData.sAccount_user << '#';
+		fcout << p->xData.sPassword_user;
+		if (p->pNext) {
+			fcout << endl;
+		}
+	}
+	fcout.close();
+}
+
+void ghiFileUser() {
+	ofstream fcout;
+	fcout.open("user.dat");
+	for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+		fcout << p->xData.sAccount << '#';
+		fcout << p->xData.sPassword << '#';
+		fcout << p->xData.sName << '#';
+		fcout << p->xData.nAge << '#';
+		fcout << p->xData.sAddress << '#';
+		fcout << p->xData.nNumberPhone << '#';
+		fcout << p->xData.sMailAddress;
+		if (p->pNext) {
+			fcout << endl;
+		}
+	}
+	fcout.close();
+}
+
+void changePassword(string sUser) {
+	string sPass;
+	string sPass2;
+	SetColor(13);
+	cout << "\t\tNhap password moi: ";
+	rewind(stdin);
+	SetColor(15);
+	getline(cin, sPass);
+
+	do {
+		SetColor(13);
+		cout << "\t\tNhap lai password moi: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, sPass2);
+		if (sPass != sPass2) {
+			SetColor(12);
+			cout << "\t\t\tNhap lai khong dung\n";
+		}
+	} while (sPass != sPass2);
+	
+	for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+		if (p->xData.sAccount == sUser) {
+			p->xData.sPassword = sPass;
+		}
+	}
+	for (EmployeeNode *p = EmployeeL.pHead; p != NULL; p = p->pNext) {
+		if (p->xData.sAccount_user == sUser) {
+			p->xData.sPassword_user = sPass;
+		}
+	}
+}
+
+void editEmployee() {
+	SetColor(10);
+	cout << "\t\t*************************************************" << endl;
+	cout << "\t\t*                                               *" << endl;
+	cout << "\t\t*                 ";
+	SetColor(14);
+	cout << "ADMIN EDIT";
+	SetColor(10);
+	cout <<"                    *" << endl;
+	cout << "\t\t*                                               *" << endl;
+	cout << "\t\t*************************************************" << endl;
+	cout << endl;
+	string sUsername;
+	SetColor(13);
+	cout << "\t\tNhap Username ban muon edit: ";
+	rewind(stdin);
+	SetColor(11);
+	getline(cin, sUsername);
+	bool flag = 0;
+	for(Node *p = userL.pHead;p != NULL; p = p->pNext) {
+		if (p->xData.sAccount == sUsername) {
+			flag = 1;
+			outputUser(p->xData);
+			cout << endl;
+			cout << "\t\t=================================================" << endl;
+			cout << "\t\t= "; SetColor(13); cout << "\t\t1. Edit name";SetColor(12); cout << "          =" << endl;
+			cout << "\t\t= "; SetColor(13); cout << "\t\t2. Find employee";SetColor(12); cout << "                =" << endl;
+			cout << "\t\t= "; SetColor(13); cout << "\t\t3. Edit employee";SetColor(12); cout << "                =" << endl;
+			cout << "\t\t= "; SetColor(13); cout << "\t\t4. View employee";SetColor(12); cout << "                =" << endl;
+			cout << "\t\t= "; SetColor(13); cout << "\t\t5. Exit Application";SetColor(12); cout << "             =" << endl;
+			SetColor(12);
+			cout << "\t\t=================================================" << endl;
+			cout << endl;
+			SetColor(13);
+			int iOption;
+			cout << "Ban muon edit: ";
+			SetColor(15);
+			cin >> iOption;
+			system("pause");
+			system("cls");
+			login();
+		}
+	}
+	if (flag == 0) {
+		SetColor(12);
+		cout << "\nUsername khong ton tai!\n";
+		cout << endl;
+		system("pause");
+		system("cls");
+		login();
+	}
+}
+
 void loading(int iTime) {
 	for (int i = 0; i < iTime; i++) {
         std::cout << "\b\b\b\b\b\b\b\b\b\bLoading   " << std::flush;
@@ -130,7 +250,7 @@ void loading(int iTime) {
         Sleep(200);
         std::cout << "\b\b\b\b\b\b\b\b\b\bLoading.  " << std::flush;
         Sleep(200);
-        std::cout << "\b\b\b\b\b\b\b\b\b\bLoading.." << std::flush;
+        std::cout << "\b\b\b\b\b\b\b\b\b\bLoading.. " << std::flush;
         Sleep(200);
         std::cout << "\b\b\b\b\b\b\b\b\b\bLoading..." << std::flush;
         Sleep(200);
@@ -138,9 +258,9 @@ void loading(int iTime) {
 	cout << endl;
 }
 
-int checkUsername(string sUser, string sPass, AdminList aL, EmployeeList eL) {
-	AdminNode *p = aL.pHead;
-	EmployeeNode *q = eL.pHead;
+int checkUsername(string sUser, string sPass) {
+	AdminNode *p = AdminL.pHead;
+	EmployeeNode *q = EmployeeL.pHead;
 	while (p != NULL) {
 		if (p->xData.sAcount_Admin == sUser) {
 			if (p->xData.sPassword_Admin == sPass) {
@@ -160,7 +280,7 @@ int checkUsername(string sUser, string sPass, AdminList aL, EmployeeList eL) {
 	return 0;
 }
 
-void login(AdminList aL, EmployeeList eL) {
+void login() {
 	int limit = 0;
 	
 	while(limit < 3) {
@@ -193,23 +313,23 @@ void login(AdminList aL, EmployeeList eL) {
 			cout << '*';
 			ch = _getch();
 		}
-		if (checkUsername(sUsername, sPass, aL, eL) == 1){
+		if (checkUsername(sUsername, sPass) == 1){
 			SetColor(10);
-			cout << "\n\t\t\t      Dang nhap thong cong!!!\n";
+			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
 			loading(3);
 			system("cls");
 			menuAdmin();
 		}
-		else if (checkUsername(sUsername, sPass, aL, eL) == 2) {
+		else if (checkUsername(sUsername, sPass) == 2) {
 			SetColor(10);
-			cout << "\n\t\t\t      Dang nhap thong cong!!!\n";
+			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
 			loading(3);
 			system("cls");
 			menuEmployee(sUsername);
 		}
-		else if (checkUsername(sUsername, sPass, aL, eL) == 0) {
+		else if (checkUsername(sUsername, sPass) == 0) {
 			SetColor(12);
 			cout << "\n\t\t\t      Sai ten hoac mat khau!\n";
 			limit++;
@@ -266,20 +386,47 @@ void menuEmployee(string sUser) {
 	cout << "\t\t=================================================" << endl;
 	SetColor(11);
 	cout << "\n\t\t-Choose service: ";
+	SetColor(15);
 	cin >> iOption;
 	switch (iOption) {
 	case 1:
-		cout << "\n\n\t\tName: \t\t" << xUS.sName << endl;
-		cout << "\t\tAge: \t\t" << xUS.nAge << endl;
-		cout << "\t\tAddress: \t" << xUS.sAddress << endl;
-		cout << "\t\tPhone: \t\t" << xUS.nNumberPhone << endl;
-		cout << "\t\tMail: \t\t" << xUS.sMailAddress << endl << endl << endl;
+		SetColor(13);
+		cout << "\n\n\t\tName: \t\t";
+		SetColor(15);
+		cout << xUS.sName << endl << endl;
+		SetColor(13);
+		cout << "\t\tAge: \t\t";
+		SetColor(15);
+		cout << xUS.nAge << endl << endl;
+		SetColor(13);
+		cout << "\t\tAddress: \t";
+		SetColor(15);
+		cout << xUS.sAddress << endl << endl;
+		SetColor(13);
+		cout << "\t\tPhone: \t\t";
+		SetColor(15);
+		cout << xUS.nNumberPhone << endl << endl;
+		SetColor(13);
+		cout << "\t\tMail: \t\t";
+		SetColor(15);
+		cout << xUS.sMailAddress << endl << endl << endl;
 		system("pause");
 		system("cls");
 		menuEmployee(sUser);
 	case 2:
+		cout << endl;
+		changePassword(sUser);
+		ghiFileUser();
+		ghiFileEmployee();
+		SetColor(10);
+		cout << "\n\t\t\tDoi password thanh cong!!!\n";
+		system("pause");
+		system("cls");
+		menuEmployee(sUser);
 		break;
 	default:
+		system("cls");
+		login();
 		break;
 	}
 }
@@ -308,7 +455,30 @@ void menuAdmin() {
 	cout << "\t\t=================================================" << endl;
 	SetColor(11);
 	cout << "\n\t\t-Choose service: ";
+	SetColor(15);
 	cin >> iOption;
+	switch (iOption) {
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		system("cls");
+		editEmployee();
+		break;
+	case 4:
+		system("cls");
+		outputUsers();
+		system("pause");
+		system("cls");
+		menuAdmin();
+		break;
+	case 5:
+		system("cls");
+		break;
+	default:
+		break;
+	}
 }
 
 void SetColor(int ForgC) 
@@ -353,16 +523,7 @@ Node *CreateNode(User xUS)
 	p->pNext = NULL;
 	return p;
 }
-void login(User xUS)
-{
-	cout<<"\n Account: ";
-	rewind(stdin);
-	getline(cin, xUS.sAccount);
-	cout<<"\n Password: ";
-	rewind(stdin);
-	getline(cin, xUS.sPassword);
-}
-void docFileUsers(List &L)
+void docFileUsers()
 {
 	ifstream fcin;
 	fcin.open("user.DAT");
@@ -383,92 +544,119 @@ void docFileUsers(List &L)
 		getline(fcin, xUS.nNumberPhone, '#');
 		rewind(stdin);
 		getline(fcin,xUS.sMailAddress);
-		addTail(L, xUS);
+		addTail(xUS);
 	}
 	fcin.close();
 }
-void docFileAdmins(AdminList &L) {
+void docFileAdmins() {
 	ifstream fcin;
 	fcin.open("administrators.dat");
-	while (fcin.eof() != 1)
-	{
+	while (fcin.eof() != 1) {
 		Administrators xAdmin;
 		rewind(stdin);
 		getline(fcin, xAdmin.sAcount_Admin, '#');
 		rewind(stdin);
 		getline(fcin, xAdmin.sPassword_Admin);
-		addTailAdmin(L, xAdmin);
+		addTailAdmin(xAdmin);
 	}
 	fcin.close();
 }
-void docFileEmployees(EmployeeList &L) {
+void docFileEmployees() {
 	ifstream fcin;
 	fcin.open("employee.dat");
-	while (fcin.eof() != 1)
-	{
+	while (fcin.eof() != 1) {
 		Employee xEmployee;
 		rewind(stdin);
 		getline(fcin, xEmployee.sAccount_user, '#');
 		rewind(stdin);
 		getline(fcin, xEmployee.sPassword_user);
-		addTailEmployee(L, xEmployee);
+		addTailEmployee(xEmployee);
 	}
 	fcin.close();
 }
-void addTail(List &L, User xUS)
+void addTail(User xUS)
 {
 	Node *pNew = CreateNode(xUS);
-	if (L.pHead == NULL)
+	if (userL.pHead == NULL)
 	{
-		L.pHead = L.pTail = pNew;
+		userL.pHead = userL.pTail = pNew;
 	}
 	else
 	{
-		L.pTail->pNext = pNew;
-		L.pTail = pNew;
+		userL.pTail->pNext = pNew;
+		userL.pTail = pNew;
 	}
 }
-void addTailAdmin(AdminList &L, Administrators xAdmin) {
+void addTailAdmin(Administrators xAdmin) {
 	AdminNode *pNew = CreateNodeAdmin(xAdmin);
-	if (L.pHead == NULL)
+	if (AdminL.pHead == NULL)
 	{
-		L.pHead = L.pTail = pNew;
+		AdminL.pHead = AdminL.pTail = pNew;
 	}
 	else
 	{
-		L.pTail->pNext = pNew;
-		L.pTail = pNew;
+		AdminL.pTail->pNext = pNew;
+		AdminL.pTail = pNew;
 	}
 }
-void addTailEmployee(EmployeeList &L, Employee xEmployee) {
+void addTailEmployee(Employee xEmployee) {
 	EmployeeNode *pNew = CreateNodeEmployee(xEmployee);
-	if (L.pHead == NULL)
+	if (EmployeeL.pHead == NULL)
 	{
-		L.pHead = L.pTail = pNew;
+		EmployeeL.pHead = EmployeeL.pTail = pNew;
 	}
 	else
 	{
-		L.pTail->pNext = pNew;
-		L.pTail = pNew;
+		EmployeeL.pTail->pNext = pNew;
+		EmployeeL.pTail = pNew;
 	}
 }
-void outputUser(User xUS)
-{
-	cout<<"\n Account: "<< xUS.sAccount<<endl;
-	cout<<" Password: "<< xUS.sPassword <<endl;
-	cout<<"\n Ho Ten: "<<  xUS.sName <<endl;
-	cout<<"\n Tuoi: "<<  xUS.nAge <<endl;
-	cout<<"\n Address: "<< xUS.sAddress <<endl;
-	cout<<"\n nNumberPhone: "<<  xUS.nNumberPhone <<endl;
-	cout<<"\n MailAddress: "<<  xUS.sMailAddress<<endl;
+void outputUser(User xUS) {
+	SetColor(13);
+	cout<<"\n \t\tAccount: ";
+	SetColor(15);
+	cout << xUS.sAccount<<endl;
+
+	SetColor(13);
+	cout<<" \t\tPassword: ";
+	SetColor(15);
+	cout << xUS.sPassword <<endl;
+
+	SetColor(13);
+	cout<<"\n \t\tHo Ten: ";
+	SetColor(15);
+	cout <<  xUS.sName <<endl;
+
+	SetColor(13);
+	cout<<"\n \t\tTuoi: ";
+	SetColor(15);
+	cout <<  xUS.nAge <<endl;
+
+	SetColor(13);
+	cout<<"\n \t\tAddress: ";
+	SetColor(15);
+	cout << xUS.sAddress <<endl;
+
+	SetColor(13);
+	cout<<"\n \t\tnNumberPhone: ";
+	SetColor(15);
+	cout <<  xUS.nNumberPhone <<endl;
+
+	SetColor(13);
+	cout<<"\n \t\tMailAddress: ";
+	SetColor(15);
+	cout <<  xUS.sMailAddress<<endl;
 }
-void outputUsers(List L)
-{
+void outputUsers() {
 	User xUS;
-	cout << "\n______________XUAT DS______________\n";
-	for(Node *p=L.pHead;p!=NULL;p=p->pNext)
-	{
+	SetColor(10);
+	cout << "\n**************************** Danh Sach User ****************************\n";
+	int i = 1;
+	for(Node *p = userL.pHead;p!=NULL;p=p->pNext) {
+		SetColor(14);
+		cout << "\n\t\t-------------- User " << i << " --------------\n";
 		outputUser(p->xData);
 		cout<<endl;
+		i++;
 	}
 }
