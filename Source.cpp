@@ -94,6 +94,9 @@ void ghiFileUser();
 void ghiFileEmployee();
 void ghiFileUserAccount(User xUser);
 void changePassword(string sUser);
+int checkUsername(string sUsername);
+void createNewEmployee();
+void findEmployee();
 
 //Bien toan cuc
 List userL;
@@ -105,8 +108,6 @@ void main() {
 	docFileAdmins();
 	docFileEmployees();
 	docFileUsers();
-	
-	//outputUsers(userL);
 
 	login();
 
@@ -114,6 +115,258 @@ void main() {
 }
 
 //dinh nghia ham con
+void findEmployee() {
+	int iOption;
+	SetColor(10);
+	cout << "\t\t*************************************************" << endl;
+	cout << "\t\t*                                               *" << endl;
+	cout << "\t\t*                 ";
+	SetColor(14);
+	cout << "FIND EMPLOYEE";
+	SetColor(10);
+	cout <<"                 *" << endl;
+	cout << "\t\t*                                               *" << endl;
+	cout << "\t\t*************************************************" << endl;
+	cout << endl;
+	SetColor(12);
+	cout << "\t\t=================================================" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t1. Find with Account";SetColor(12); cout << "            =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t2. Find with Name";SetColor(12); cout << "               =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t3. Find with Age";SetColor(12); cout << "                =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t4. Find with Phone number";SetColor(12); cout << "       =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t5. Find with Address";SetColor(12); cout << "            =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t6. Find with Email";SetColor(12); cout << "              =" << endl;
+	cout << "\t\t= "; SetColor(13); cout << "\t\t7. Exit Application";SetColor(12); cout << "             =" << endl;
+	SetColor(12);
+	cout << "\t\t=================================================" << endl;
+	SetColor(11);
+	cout << "\n\t\t-Choose service: ";
+	SetColor(15);
+	cin >> iOption;
+	bool exist = false;
+	int number = 0;
+	string str = "";
+	switch (iOption)
+	{
+	case 1:
+		SetColor(11);
+		cout << "\n\t\tEnter Account to find: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, str);
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.sAccount == str) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+				break;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tAcount does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	case 2:
+		SetColor(11);
+		cout << "\n\t\tEnter Name to find: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, str);
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.sName == str) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tName does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	case 3:
+		SetColor(11);
+		cout << "\n\t\tEnter Age to find: ";
+		rewind(stdin);
+		SetColor(15);
+		cin >> number;
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.nAge == number) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tAcount does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	case 4:
+		SetColor(11);
+		cout << "\n\t\tEnter Phone number to find: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, str);
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.nNumberPhone == str) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+				break;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tPhone number does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	case 5:
+		SetColor(11);
+		cout << "\n\t\tEnter Address to find: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, str);
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.sAddress == str) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tAddress does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	case 6:
+		SetColor(11);
+		cout << "\n\t\tEnter Email to find: ";
+		rewind(stdin);
+		SetColor(15);
+		getline(cin, str);
+		for (Node *p = userL.pHead; p != NULL; p = p->pNext) {
+			if (p->xData.sMailAddress == str) {
+				SetColor(14);
+				cout << "\n\t\t- Employee -\n";
+				outputUser(p->xData);
+				exist = true;
+				break;
+			}
+		}
+		if (exist == false) {
+			SetColor(12);
+			cout << "\n\t\t\tEmail does not exist!\n\n";
+		}
+		system("pause");
+		system("cls");
+		findEmployee();
+		break;
+	default:
+		system("cls");
+		menuAdmin();
+		break;
+	}
+}
+
+void createNewEmployee() {
+	User xUS;
+	Employee xEmployee;
+
+	do {
+		SetColor(11);
+		cout << "\n\t\tNhap Username: ";
+		SetColor(15);
+		rewind(stdin);
+		getline(cin, xUS.sAccount);
+		if (checkUsername(xUS.sAccount) == 1) {
+			SetColor(12);
+			cout << "\n\t\t\tUsername da ton tai!\n\n";
+		}
+	} while (checkUsername(xUS.sAccount) == 1);
+
+	SetColor(11);
+	cout << "\t\tNhap Password: ";
+	SetColor(15);
+	rewind(stdin);
+	getline(cin, xUS.sPassword);
+
+	SetColor(11);
+	cout << "\t\tNhap Ho ten: ";
+	SetColor(15);
+	rewind(stdin);
+	getline(cin, xUS.sName);
+
+	SetColor(11);
+	cout << "\t\tNhap Tuoi: ";
+	SetColor(15);
+	rewind(stdin);
+	cin >> xUS.nAge;
+
+	SetColor(11);
+	cout << "\t\tNhap Dia chi: ";
+	SetColor(15);
+	rewind(stdin);
+	getline(cin, xUS.sAddress);
+
+	SetColor(11);
+	cout << "\t\tNhap SDT: ";
+	SetColor(15);
+	rewind(stdin);
+	getline(cin, xUS.nNumberPhone);
+
+	SetColor(11);
+	cout << "\t\tNhap Email: ";
+	SetColor(15);
+	rewind(stdin);
+	getline(cin, xUS.sMailAddress);
+
+	addTail(xUS);
+
+	xEmployee.sAccount_user = xUS.sAccount;
+	xEmployee.sPassword_user = xUS.sPassword;
+
+	addTailEmployee(xEmployee);
+
+	ghiFileUser();
+	ghiFileUserAccount(xUS);
+	ghiFileEmployee();
+
+	SetColor(10);
+	cout << "\n\t\t\tTao user moi thanh cong!\n\n";
+}
+
+int checkUsername(string sUsername) {
+	for (EmployeeNode *p = EmployeeL.pHead; p != NULL; p = p->pNext) {
+		if (p->xData.sAccount_user == sUsername) return 1;
+	}
+	for (AdminNode *p = AdminL.pHead; p != NULL; p = p->pNext) {
+		if (p->xData.sAcount_Admin == sUsername) return 1;
+	}
+	return 0;
+}
+
 void ghiFileUserAccount(User xUser) {
 	ofstream fcout;
 	fcout.open(xUser.sAccount + ".dat");
@@ -408,7 +661,7 @@ void login() {
 			SetColor(10);
 			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
-			loading(3);
+			loading(1);
 			system("cls");
 			menuAdmin();
 		}
@@ -416,7 +669,7 @@ void login() {
 			SetColor(10);
 			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
-			loading(3);
+			loading(1);
 			system("cls");
 			menuEmployee(sUsername);
 		}
@@ -550,8 +803,14 @@ void menuAdmin() {
 	cin >> iOption;
 	switch (iOption) {
 	case 1:
+		createNewEmployee();
+		system("pause");
+		system("cls");
+		menuAdmin();
 		break;
 	case 2:
+		system("cls");
+		findEmployee();
 		break;
 	case 3:
 		system("cls");
@@ -564,10 +823,8 @@ void menuAdmin() {
 		system("cls");
 		menuAdmin();
 		break;
-	case 5:
-		system("cls");
-		break;
 	default:
+		system("cls");
 		break;
 	}
 }
