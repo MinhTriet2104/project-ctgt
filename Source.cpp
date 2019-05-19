@@ -1,4 +1,4 @@
-/*
+﻿/*
 PROJECT Cau truc du lieu
 */
 
@@ -87,7 +87,8 @@ void SetColor(int ForgC);
 void menuAdmin();
 void menuEmployee(string sUser);
 void login();
-void loading();
+std::string inputPassword(size_t length_max);
+void loading(int iTime);
 int checkUsername(string sUser, string sPass);
 void editEmployee();
 void ghiFileUser();
@@ -624,6 +625,44 @@ int checkUsername(string sUser, string sPass) {
 	return 0;
 }
 
+std::string inputPassword(size_t length_max)
+{
+    std::string strRet;
+    char ch = 0;
+    bool bShow = false;
+    do {
+        ch = getch();
+        if((strRet.size() < length_max) && (::isalpha(ch) || ::isalnum(ch)))
+        {
+            std::cout << (bShow ? ch : '*');
+            strRet.push_back(ch);
+        }
+        else
+        {
+            if(0x1B == ch)
+            {
+                bShow = !bShow;
+ 
+                std::cout << std::string(strRet.size(), '\b');
+           
+                if(bShow)
+                    std::cout << strRet;
+                else
+                    std::cout << std::string(strRet.size(), '*');
+               
+            }
+            if('\b' == ch && !strRet.empty())
+            {
+                std::cout << "\b \b";
+                strRet.resize(strRet.size() - 1);
+            }
+        }
+ 
+    } while ('\r' != ch);
+    std::cout << std::endl;
+    return strRet;
+}
+
 void login() {
 	int limit = 0;
 	
@@ -648,15 +687,10 @@ void login() {
 
 		SetColor(13);
 		string sPass = "";
-		char ch;
+		char ch = 0;
 		cout << "\t\t\t-  Password:   ";
 		SetColor(15);
-		ch = _getch();
-		while(ch != 13){
-			sPass.push_back(ch);
-			cout << '*';
-			ch = _getch();
-		}
+		sPass = inputPassword(20);
 		if (checkUsername(sUsername, sPass) == 1){
 			SetColor(10);
 			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
