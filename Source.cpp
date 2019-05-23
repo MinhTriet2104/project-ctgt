@@ -693,7 +693,7 @@ void login() {
 		sPass = inputPassword(20);
 		if (checkUsername(sUsername, sPass) == 1){
 			SetColor(10);
-			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
+			cout << "\n\n\t\t\t      Dang nhap thang cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
 			loading(1);
 			system("cls");
@@ -701,7 +701,7 @@ void login() {
 		}
 		else if (checkUsername(sUsername, sPass) == 2) {
 			SetColor(10);
-			cout << "\n\n\t\t\t      Dang nhap thong cong!!!\n";
+			cout << "\n\n\t\t\t      Dang nhap thang cong!!!\n";
 			cout << "\n\t\t\t\t\t\t";
 			loading(1);
 			system("cls");
